@@ -400,6 +400,16 @@ class AGUIChatWorkflow(Workflow):
                     },
                 )
             )
+        for tool_result in frontend_tool_calls:
+            new_tool_messages.append(
+                ChatMessage(
+                    role="tool",
+                    content=tool_result.tool_output.content,
+                    additional_kwargs={
+                        "tool_call_id": tool_result.tool_call_id,
+                    },
+                )
+            )
 
         # emit a messages snapshot event if there are new messages
         chat_history = await ctx.store.get("chat_history")
